@@ -604,7 +604,12 @@
     function cargarShips() {
       try {
         const saved = localStorage.getItem('2a1-ships');
-        if (saved) ships = JSON.parse(saved);
+        if (saved) {
+          const all = JSON.parse(saved);
+          const now = Date.now();
+          ships = all.filter(s => (now - s.ts) < 30 * 60 * 60 * 1000);
+          localStorage.setItem('2a1-ships', JSON.stringify(ships));
+        }
       } catch(e) { ships = []; }
       renderShips();
     }
